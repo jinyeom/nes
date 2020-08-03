@@ -2,25 +2,24 @@ package main
 
 // Status register
 const (
-	_C uint8 = (1 << 0) // carry
-	_Z uint8 = (1 << 1) // zero
-	_I uint8 = (1 << 2) // disable interrupts
+	_C uint8 = (1 << 0) // carry flag
+	_Z uint8 = (1 << 1) // zero flag
+	_I uint8 = (1 << 2) // interrupt disable
 	_D uint8 = (1 << 3) // decimal mode
-	_B uint8 = (1 << 4) // break
+	_B uint8 = (1 << 4) // break command
 	_U uint8 = (1 << 5) // unused
-	_V uint8 = (1 << 6) // overflow
-	_N uint8 = (1 << 7) // negative
+	_V uint8 = (1 << 6) // overflow flag
+	_N uint8 = (1 << 7) // negative flag
 )
 
-// CPU implements MOS Technology 6502.
-// https://en.wikipedia.org/wiki/MOS_Technology_6502
+// CPU implements 2A03 CPU.
 type CPU struct {
-	a  uint8  // A register
-	x  uint8  // X register
-	y  uint8  // Y register
+	a  uint8  // accumulator
+	x  uint8  // index register X
+	y  uint8  // index register Y
 	sp uint8  // stack pointer
 	pc uint16 // program counter
-	sr uint8  // status register
+	p  uint8  // processor status
 
 	data    uint8  // fetched data byte
 	addrAbs uint16 // read absolute location
@@ -128,23 +127,16 @@ func (c *CPU) txa() uint8 { return 0 }
 func (c *CPU) txs() uint8 { return 0 }
 func (c *CPU) tya() uint8 { return 0 }
 
-func (c *CPU) clock() {
-	if c.cycles == 0 {
-		opcode := c.read(c.pc, false)
-		c.pc++
-	}
-}
-
-func (c *CPU) reset() {
+// non-maskable interrupt request
+func (c *CPU) NMI() {
 
 }
 
 // interrupt request
-func (c *CPU) irq() {
+func (c *CPU) IRQ() {
 
 }
 
-// non-maskable interrupt request
-func (c *CPU) nmi() {
+func (c *CPU) Reset() {
 
 }
